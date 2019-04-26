@@ -18,6 +18,3 @@ class MidiPlayer():
 
     def noteoff(self, midi_note):
         self.midiout.send_message([0x80, midi_note, 0])
-
-def triad(root):
-    return [root, root + 4, root + 7]

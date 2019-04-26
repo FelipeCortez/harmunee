@@ -9,7 +9,8 @@ black = 0, 0, 0
 
 player = midi.MidiPlayer()
 
-base = ionian
+bases = cycle([ionian, natural_minor, harmonic_minor, melodic_minor])
+base = next(bases)
 
 music_key = 60
 
@@ -27,6 +28,9 @@ key_to_chord = {
 
 active_keys = {}
 
+def pressed(keycode):
+    return pygame.key.get_pressed()[keycode]
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
@@ -40,37 +44,34 @@ while True:
             if event.key == pygame.K_DOWN:
                 music_key -= 1
 
-            if event.key in key_to_chord.keys():
-                inv_flag = pygame.key.get_pressed()[pygame.K_p]
-                bass_flag = pygame.key.get_pressed()[pygame.K_SPACE]
+            if event.key == pygame.K_RIGHT:
+                base = next(bases)
 
-                chord = deg(base, key_to_chord[event.key], music_key)
+            if event.key in key_to_chord.keys():
+                chordfn = triad if not pressed(pygame.K_j) else tetrad
+                chord = deg(base, key_to_chord[event.key], music_key, chordfn)
                 root = chord[0]
 
-                if inv_flag:
+                inv_keys = [pygame.K_p, pygame.K_o, pygame.K_i]
+                for _ in [k for k in inv_keys if pressed(k)]:
                     chord = invert_down(chord)
 
-                if bass_flag:
+                if pressed(pygame.K_SPACE):
                     chord = bass(chord, root)
+
+                if pressed(pygame.K_n):
+                    chord = bass_fifth(chord, root)
+
+                print(chord)
+
+                active_keys[event.key] = chord
 
                 for note in chord:
                     player.noteon(note)
 
         if event.type == pygame.KEYUP:
             if event.key in key_to_chord.keys():
-                inv_flag = pygame.key.get_pressed()[pygame.K_p]
-                bass_flag = pygame.key.get_pressed()[pygame.K_SPACE]
-
-                chord = deg(base, key_to_chord[event.key], music_key)
-                root = chord[0]
-
-                if inv_flag:
-                    chord = invert_down(chord)
-
-                if bass_flag:
-                    chord = bass(chord, root)
-
-                for note in chord:
+                for note in active_keys.pop(event.key):
                     player.noteoff(note)
 
         if event.type == pygame.QUIT:

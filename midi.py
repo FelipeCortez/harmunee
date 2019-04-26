@@ -13,8 +13,11 @@ class MidiPlayer():
     def __del__(self):
         del self.midiout
 
-    def play(self, midi_note):
-        note_on = [0x90, midi_note, 112] # channel 1, middle C, velocity 112
-        note_off = [0x80, midi_note, 0]
-        self.midiout.send_message(note_on)
-        self.midiout.send_message(note_off)
+    def noteon(self, midi_note):
+        self.midiout.send_message([0x90, midi_note, 112])
+
+    def noteoff(self, midi_note):
+        self.midiout.send_message([0x80, midi_note, 0])
+
+def triad(root):
+    return [root, root + 4, root + 7]

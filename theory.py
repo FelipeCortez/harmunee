@@ -14,7 +14,7 @@ def tetrad(base, root, deg):
 
 def deg(base, roman, key):
     idx = ["i", "ii", "iii", "iv", "v", "vi", "vii"].index(roman)
-    return tetrad(base, key, idx)
+    return triad(base, key, idx)
 
 def accumulator(base):
     accum = 0
@@ -22,8 +22,11 @@ def accumulator(base):
         yield accum
         accum = accum + x
 
-def bass(chord):
-    return [chord[0] - 12] + chord
+def bass(chord, note):
+    return [note - 12] + chord
 
-def invert(chord):
+def invert_up(chord):
     return chord[1:] + [chord[0] + 12]
+
+def invert_down(chord):
+    return chord[:-1] + [chord[-1] - 12]

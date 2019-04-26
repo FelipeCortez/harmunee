@@ -25,6 +25,8 @@ key_to_chord = {
     pygame.K_v: "vii",
 }
 
+active_keys = {}
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
@@ -39,16 +41,36 @@ while True:
                 music_key -= 1
 
             if event.key in key_to_chord.keys():
-                chord = deg(base, key_to_chord[event.key], music_key)
+                inv_flag = pygame.key.get_pressed()[pygame.K_p]
+                bass_flag = pygame.key.get_pressed()[pygame.K_SPACE]
 
-                for note in bass(chord):
+                chord = deg(base, key_to_chord[event.key], music_key)
+                root = chord[0]
+
+                if inv_flag:
+                    chord = invert_down(chord)
+
+                if bass_flag:
+                    chord = bass(chord, root)
+
+                for note in chord:
                     player.noteon(note)
 
         if event.type == pygame.KEYUP:
             if event.key in key_to_chord.keys():
-                chord = deg(base, key_to_chord[event.key], music_key)
+                inv_flag = pygame.key.get_pressed()[pygame.K_p]
+                bass_flag = pygame.key.get_pressed()[pygame.K_SPACE]
 
-                for note in bass(chord):
+                chord = deg(base, key_to_chord[event.key], music_key)
+                root = chord[0]
+
+                if inv_flag:
+                    chord = invert_down(chord)
+
+                if bass_flag:
+                    chord = bass(chord, root)
+
+                for note in chord:
                     player.noteoff(note)
 
         if event.type == pygame.QUIT:

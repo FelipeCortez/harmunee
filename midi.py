@@ -6,6 +6,7 @@ class MidiPlayer():
         self.midiout = rtmidi.MidiOut()
 
         if self.midiout.get_ports():
+            print(self.midiout.get_ports())
             self.midiout.open_port(0)
         else:
             self.midiout.open_virtual_port("outport")

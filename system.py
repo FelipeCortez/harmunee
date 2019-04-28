@@ -1,11 +1,16 @@
-import sys, pygame, midi
+import sys, pygame, midi, cairo
 from theory import *
+from draw import *
+
+size = width, height = 512, 512
+
 pygame.init()
+pygame.display.set_mode(size)
 
-size = width, height = 320, 240
-screen = pygame.display.set_mode(size)
+#clock = pygame.time.Clock()
+#clock.tick(30)
 
-black = 0, 0, 0
+screen = pygame.display.get_surface()
 
 player = midi.MidiPlayer()
 
@@ -30,6 +35,9 @@ active_keys = {}
 
 def pressed(keycode):
     return pygame.key.get_pressed()[keycode]
+
+screen.fill((0, 0, 0))
+pygame.display.flip()
 
 while True:
     for event in pygame.event.get():
@@ -69,6 +77,16 @@ while True:
                 for note in chord:
                     player.noteon(note)
 
+            if event.key == pygame.K_t:
+                surface = draw()
+
+                buf = surface.get_data()
+                image = pygame.image.frombuffer(buf, (width, height), "ARGB")
+
+                screen.fill((0, 0, 0))
+                screen.blit(image, (0, 0))
+                pygame.display.flip()
+
         if event.type == pygame.KEYUP:
             if event.key in key_to_chord.keys():
                 for note in active_keys.pop(event.key):
@@ -77,5 +95,3 @@ while True:
         if event.type == pygame.QUIT:
             sys.exit()
 
-    screen.fill(black)
-    pygame.display.flip()

@@ -34,3 +34,6 @@ def invert_up(chord):
 
 def invert_down(chord):
     return [chord[-1] - 12] + chord[:-1]
+
+def midi_to_note(value):
+    return "C C# D D# E F F# G G# A A# B".split()[value % 12]

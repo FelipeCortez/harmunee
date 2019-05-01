@@ -21,8 +21,8 @@ def prevent_stretching():
         user32 = ctypes.windll.user32
         user32.SetProcessDPIAware()
 
-def redraw():
-    surface = draw()
+def redraw(*args):
+    surface = draw(*args)
     buf = surface.get_data()
     screen = pygame.display.get_surface()
     image = pygame.image.frombuffer(buf, (width, height),
@@ -111,12 +111,14 @@ def main():
                     for note in chord:
                         player.noteon(note)
 
-                    redraw()
+                redraw(f"Key: {midi_to_note(music_key)}")
 
             if event.type == pygame.KEYUP:
                 if event.key in key_to_chord.keys():
                     for note in active_keys.pop(event.key):
                         player.noteoff(note)
+
+                redraw(f"Key: {midi_to_note(music_key)}")
 
         clock.tick(50)
 

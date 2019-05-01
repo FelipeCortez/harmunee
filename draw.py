@@ -6,7 +6,7 @@ from math import pi
 size = width, height = 658, 250
 
 
-def draw():
+def draw(debug_text=""):
     surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
     cr = cairo.Context(surface)
     cr.select_font_face("Iosevka", cairo.FONT_SLANT_NORMAL,
@@ -25,7 +25,7 @@ def draw():
                      (padding + key_idx * (key_size + gap) + offset * row_idx,
                       padding + row_idx * (key_size + gap)))
 
-    draw_debug(cr, "Key: C")
+    draw_debug(cr, debug_text)
 
     return surface
 

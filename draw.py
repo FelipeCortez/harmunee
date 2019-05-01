@@ -28,5 +28,6 @@ def draw_rounded(cr, area, radius):
     cr.arc(b - radius, c + radius, radius, 3*(pi/2), 4*(pi/2))
     cr.arc(b - radius, d - radius, radius, 0*(pi/2), 1*(pi/2))
     cr.arc(a + radius, d - radius, radius, 1*(pi/2), 2*(pi/2))
+    cr.new_path()
     cr.close_path()
     cr.stroke()

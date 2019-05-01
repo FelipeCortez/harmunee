@@ -50,6 +50,8 @@ def main():
 
     pygame.init()
     pygame.display.set_mode(size)
+    pygame.display.set_caption('Harmunee')
+
     screen = pygame.display.get_surface()
 
     screen.fill((255, 255, 255))

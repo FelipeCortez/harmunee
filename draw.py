@@ -25,7 +25,7 @@ def draw():
                      (padding + key_idx * (key_size + gap) + offset * row_idx,
                       padding + row_idx * (key_size + gap)))
 
-            print(key_size + key_idx * (key_size + gap) + offset * row_idx)
+    draw_debug(cr, "Key: C")
 
     return surface
 
@@ -41,6 +41,12 @@ def draw_key(cr, text, size, pos):
     area = (x, x + width, y, y + height)
 
     draw_rounded(cr, area, 3)
+
+
+def draw_debug(cr, text):
+    cr.set_font_size(16)
+    cr.move_to(5, height - 6)
+    cr.show_text(text)
 
 
 def draw_rounded(cr, area, radius):

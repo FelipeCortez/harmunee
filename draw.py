@@ -9,16 +9,16 @@ def draw():
     surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
 
     x, y, radius = (random.randint(230, 270), random.randint(230, 270), 200)
-    ctx = cairo.Context(surface)
-    ctx.set_line_width(15)
-    ctx.arc(x, y, radius, 0, 2.0 * math.pi)
-    ctx.set_source_rgba(random.random(), 1, 0, 0.3)
-    ctx.fill_preserve()
-    ctx.set_source_rgb(0, 0, 0)
-    ctx.stroke()
+    cr = cairo.Context(surface)
+    cr.set_line_width(15)
+    cr.arc(x, y, radius, 0, 2.0 * math.pi)
+    cr.set_source_rgba(random.random(), 1, 0, 0.3)
+    cr.fill_preserve()
+    cr.set_source_rgb(0, 0, 0)
+    cr.stroke()
 
-    ctx.set_line_width(1)
-    draw_rounded(ctx, (30, 60, 30, 60), 5)
+    cr.set_line_width(1)
+    draw_rounded(cr, (30, 60, 30, 60), 5)
 
     return surface
 

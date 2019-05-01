@@ -21,6 +21,18 @@ def prevent_stretching():
         user32 = ctypes.windll.user32
         user32.SetProcessDPIAware()
 
+def redraw():
+    surface = draw()
+    buf = surface.get_data()
+    screen = pygame.display.get_surface()
+    image = pygame.image.frombuffer(buf, (width, height),
+                                    "RGBA")
+
+    screen.fill((255, 255, 255))
+    screen.blit(image, (0, 0))
+    pygame.display.flip()
+
+
 
 def pressed(keycode):
     return pygame.key.get_pressed()[keycode]
@@ -52,9 +64,7 @@ def main():
     pygame.display.set_mode(size)
     pygame.display.set_caption('Harmunee')
 
-    screen = pygame.display.get_surface()
-
-    screen.fill((255, 255, 255))
+    redraw()
 
     clock = pygame.time.Clock()
 
@@ -101,15 +111,7 @@ def main():
                     for note in chord:
                         player.noteon(note)
 
-                if event.key == pygame.K_t:
-                    surface = draw()
-                    buf = surface.get_data()
-                    image = pygame.image.frombuffer(buf, (width, height),
-                                                    "RGBA")
-
-                    screen.fill((255, 255, 255))
-                    screen.blit(image, (0, 0))
-                    pygame.display.flip()
+                    redraw()
 
             if event.type == pygame.KEYUP:
                 if event.key in key_to_chord.keys():

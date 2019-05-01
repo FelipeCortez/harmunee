@@ -29,8 +29,6 @@ def pressed(keycode):
 def main():
     prevent_stretching()
 
-    size = width, height = 512, 512
-
     player = midi.MidiPlayer()
 
     bases = cycle([ionian, natural_minor, harmonic_minor, melodic_minor])

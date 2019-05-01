@@ -3,31 +3,52 @@ from math import pi
 
 # reference: https://github.com/pygobject/pycairo/blob/master/examples/pygame-demo.py
 
-size = width, height = 512, 512
+size = width, height = 658, 250
+
 
 def draw():
     surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
-
-    x, y, radius = (random.randint(230, 270), random.randint(230, 270), 200)
     cr = cairo.Context(surface)
-    cr.set_line_width(15)
-    cr.arc(x, y, radius, 0, 2.0 * math.pi)
-    cr.set_source_rgba(random.random(), 1, 0, 0.3)
-    cr.fill_preserve()
-    cr.set_source_rgb(0, 0, 0)
-    cr.stroke()
-
+    cr.select_font_face("Iosevka", cairo.FONT_SLANT_NORMAL,
+                        cairo.FONT_WEIGHT_NORMAL)
     cr.set_line_width(1)
-    draw_rounded(cr, (30, 60, 30, 60), 5)
+
+    offset = 24
+    gap = 5
+    key_size = 60
+    padding = 5
+
+    for row_idx, keys in enumerate(["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM,."]):
+        for key_idx, key in enumerate(keys):
+            draw_key(cr, key,
+                     (key_size, key_size),
+                     (padding + key_idx * (key_size + gap) + offset * row_idx,
+                      padding + row_idx * (key_size + gap)))
+
+            print(key_size + key_idx * (key_size + gap) + offset * row_idx)
 
     return surface
 
+
+def draw_key(cr, text, size, pos):
+    width, height = size
+    x, y = pos
+
+    cr.set_font_size(24)
+    cr.move_to(x, y + 24)
+    cr.show_text(text)
+
+    area = (x, x + width, y, y + height)
+
+    draw_rounded(cr, area, 3)
+
+
 def draw_rounded(cr, area, radius):
-    a, b, c, d = area
-    cr.arc(a + radius, c + radius, radius, 2*(pi/2), 3*(pi/2))
-    cr.arc(b - radius, c + radius, radius, 3*(pi/2), 4*(pi/2))
-    cr.arc(b - radius, d - radius, radius, 0*(pi/2), 1*(pi/2))
-    cr.arc(a + radius, d - radius, radius, 1*(pi/2), 2*(pi/2))
+    x1, x2, y1, y2 = area
     cr.new_path()
+    cr.arc(x1 + radius, y1 + radius, radius, 2 * (pi / 2), 3 * (pi / 2))
+    cr.arc(x2 - radius, y1 + radius, radius, 3 * (pi / 2), 4 * (pi / 2))
+    cr.arc(x2 - radius, y2 - radius, radius, 0 * (pi / 2), 1 * (pi / 2))
+    cr.arc(x1 + radius, y2 - radius, radius, 1 * (pi / 2), 2 * (pi / 2))
     cr.close_path()
     cr.stroke()

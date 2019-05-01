@@ -105,7 +105,7 @@ def main():
                     surface = draw()
                     buf = surface.get_data()
                     image = pygame.image.frombuffer(buf, (width, height),
-                                                    "ARGB")
+                                                    "RGBA")
 
                     screen.fill((255, 255, 255))
                     screen.blit(image, (0, 0))

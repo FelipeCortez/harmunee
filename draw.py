@@ -1,4 +1,5 @@
 import cairo, math, random
+from math import pi
 
 # reference: https://github.com/pygobject/pycairo/blob/master/examples/pygame-demo.py
 
@@ -11,9 +12,21 @@ def draw():
     ctx = cairo.Context(surface)
     ctx.set_line_width(15)
     ctx.arc(x, y, radius, 0, 2.0 * math.pi)
-    ctx.set_source_rgb(0.8, 0.8, 0.8)
+    ctx.set_source_rgba(random.random(), 1, 0, 0.3)
     ctx.fill_preserve()
-    ctx.set_source_rgb(1, 1, 1)
+    ctx.set_source_rgb(0, 0, 0)
     ctx.stroke()
 
+    ctx.set_line_width(1)
+    draw_rounded(ctx, (30, 60, 30, 60), 5)
+
     return surface
+
+def draw_rounded(cr, area, radius):
+    a, b, c, d = area
+    cr.arc(a + radius, c + radius, radius, 2*(pi/2), 3*(pi/2))
+    cr.arc(b - radius, c + radius, radius, 3*(pi/2), 4*(pi/2))
+    cr.arc(b - radius, d - radius, radius, 0*(pi/2), 1*(pi/2))
+    cr.arc(a + radius, d - radius, radius, 1*(pi/2), 2*(pi/2))
+    cr.close_path()
+    cr.stroke()

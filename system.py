@@ -1,6 +1,25 @@
-import sys, pygame, midi, cairo
+import ctypes, os, sys, pygame, midi, cairo
 from theory import *
 from draw import *
+
+
+def prevent_stretching():
+    if os.name != "nt" or sys.getwindowsversion()[0] < 6:
+        raise NotImplementedError(
+            'this script requires Windows Vista or newer')
+
+    if os.path.basename(sys.executable) == 'pythonw.exe':
+        selection = 'y'
+    else:
+        from pygame.compat import raw_input_
+        selection = None
+        while selection not in ('y', 'n'):
+            selection = raw_input_(
+                'Prevent stretching? (y/n): ').strip().lower()
+
+    if selection == 'y':
+        user32 = ctypes.windll.user32
+        user32.SetProcessDPIAware()
 
 
 def pressed(keycode):
@@ -8,6 +27,8 @@ def pressed(keycode):
 
 
 def main():
+    prevent_stretching()
+
     size = width, height = 512, 512
 
     player = midi.MidiPlayer()
@@ -33,7 +54,7 @@ def main():
     pygame.display.set_mode(size)
     screen = pygame.display.get_surface()
 
-    screen.fill((0, 0, 0))
+    screen.fill((255, 255, 255))
 
     clock = pygame.time.Clock()
 
@@ -82,12 +103,11 @@ def main():
 
                 if event.key == pygame.K_t:
                     surface = draw()
-
                     buf = surface.get_data()
                     image = pygame.image.frombuffer(buf, (width, height),
                                                     "ARGB")
 
-                    screen.fill((0, 0, 0))
+                    screen.fill((255, 255, 255))
                     screen.blit(image, (0, 0))
                     pygame.display.flip()
 

@@ -1,4 +1,6 @@
-# harmunee
+![Harmunee](https://raw.githubusercontent.com/FelipeCortez/harmunee/master/header.png "Harmunee")
+
+---
 
 Transforms your computer keyboard into a... keychord?
 
